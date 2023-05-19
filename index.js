@@ -3,7 +3,7 @@ const cors = require('cors')
 const app = express()
 require('dotenv').config()
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5000;
 
 // middleware
 app.use(cors())
@@ -28,6 +28,12 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const toysCollection=client.db('toysMarket').collection('toys');
+
+    app.get('/toys', async(req,res)=>{
+      const result = await toysCollection.find().toArray();
+      res.send(result)
+    })
 
 
 
