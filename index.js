@@ -46,6 +46,12 @@ async function run() {
       const result = await toysCollection.findOne(query)
       res.send(result)
     })
+    app.post('/toys', async(req,res)=>{
+      const body = req.body;
+      console.log(body)
+      const result = await toysCollection.insertOne(body)
+      res.send(result)
+    })
 
 
 
