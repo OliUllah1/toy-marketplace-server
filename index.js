@@ -54,6 +54,17 @@ async function run() {
     })
 
 
+    // my toys
+    app.get('/mytoys',async (req,res)=>{
+      const email = req.query.email
+      console.log(email)
+      const query = {sellerEmail:email}
+      const result = await toysCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
