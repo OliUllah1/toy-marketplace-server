@@ -37,7 +37,6 @@ async function run() {
 
     app.get('/toys', async(req,res)=>{
       const sorting = req.query.sorting
-      console.log(sorting)
       if(sorting === 'true'){
         const result = await toysCollection.find().sort({"toyPrice":1}).limit(20).toArray();
         return res.send(result)
@@ -45,8 +44,18 @@ async function run() {
         const result = await toysCollection.find().sort({"toyPrice":-1}).limit(20).toArray();
         return res.send(result)
       }
-        
-
+    })
+    app.get('/getToysByName/:text',async(req,res)=>{
+      const searchValue = req.params.text;
+      console.log(searchValue)
+      if(searchValue){
+        const query = {toyName:{ $regex: searchValue, $options: "i" }}
+      const result = await toysCollection.find(query).sort({"toyPrice":1}).toArray();
+       return res.send(result)
+      }else{
+       return res.status(401).send({error:true,message:'Toy Name Not Found'})
+      }
+      
     })
     app.get('/toys/:id',async (req,res)=>{
       const id = req.params.id;
