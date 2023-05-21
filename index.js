@@ -36,19 +36,26 @@ async function run() {
     const toysCollection= client.db('toysMarket').collection('toys');
 
     app.get('/toys', async(req,res)=>{
-      const result = await toysCollection.find().limit(20).toArray()
-      res.send(result)
+      const sorting = req.query.sorting
+      console.log(sorting)
+      if(sorting === 'true'){
+        const result = await toysCollection.find().sort({"toyPrice":1}).limit(20).toArray();
+        return res.send(result)
+      }else{
+        const result = await toysCollection.find().sort({"toyPrice":-1}).limit(20).toArray();
+        return res.send(result)
+      }
+        
+
     })
     app.get('/toys/:id',async (req,res)=>{
       const id = req.params.id;
-      console.log(id)
       const query ={_id:new ObjectId(id)}
       const result = await toysCollection.findOne(query)
       res.send(result)
     })
     app.post('/toys', async(req,res)=>{
       const body = req.body;
-      console.log(body)
       const result = await toysCollection.insertOne(body)
       res.send(result)
     })
@@ -70,7 +77,6 @@ async function run() {
     })
     app.put('/mytoys/:id',async(req,res)=>{
       const id = req.params.id;
-      console.log(id)
       const filter ={_id:new ObjectId(id)}
       const options = { upsert: true };
       const toyInfo = req.body;
