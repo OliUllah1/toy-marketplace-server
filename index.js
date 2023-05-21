@@ -47,7 +47,7 @@ async function run() {
     })
     app.get('/getToysByName/:text',async(req,res)=>{
       const searchValue = req.params.text;
-      console.log(searchValue)
+  
       if(searchValue){
         const query = {toyName:{ $regex: searchValue, $options: "i" }}
       const result = await toysCollection.find(query).sort({"toyPrice":1}).toArray();
@@ -73,7 +73,6 @@ async function run() {
     // my toys
     app.get('/mytoys',async (req,res)=>{
       const email = req.query.email
-      console.log(email)
       const query = {sellerEmail:email}
       const result = await toysCollection.find(query).toArray()
       res.send(result)
